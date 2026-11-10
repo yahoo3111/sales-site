@@ -59,15 +59,34 @@
   </div>
 </section>
 
-<section>
-  <h2 class="sec">Pricing</h2>
+<section id="pricing">
+  <h2 class="sec">Plans and pricing</h2>
+  <div class="toggle" role="group" aria-label="Billing period">
+    <button type="button" class="on" data-term="monthly">Monthly</button>
+    <button type="button" data-term="yearly">Yearly &mdash; two months free</button>
+  </div>
   <table class="price">
-    <tr><th>Plan</th><th>Monthly</th><th>Packets included</th></tr>
-    <tr><td>Basic</td><td class="num">USD 149</td><td>50 packets</td></tr>
-    <tr><td>Professional</td><td class="num">USD 299</td><td>150 packets</td></tr>
-    <tr><td>Business</td><td class="num">USD 549</td><td>300 packets</td></tr>
+    <tr><th>Plan</th><th>Price</th><th>What is included</th><th></th></tr>
+    <tr>
+      <td><b>Starter</b></td>
+      <td class="num" data-plan="starter">£24 / month</td>
+      <td>One carrier and one rate card, with extraction, arithmetic and duplicate checks.</td>
+      <td><a class="btn sm" data-plan="starter" href="https://buy.stripe.com/eVq7sLalD2mA0pod1N9EI03">Choose Starter</a></td>
+    </tr>
+    <tr>
+      <td><b>Professional</b></td>
+      <td class="num" data-plan="professional">£59 / month</td>
+      <td>Several carriers and rate cards, with contract-rate checks against each one.</td>
+      <td><a class="btn sm" data-plan="professional" href="https://buy.stripe.com/8x27sL8dve5ic864vh9EI01">Choose Professional</a></td>
+    </tr>
+    <tr>
+      <td><b>Business</b></td>
+      <td class="num" data-plan="business">£89 / month</td>
+      <td>All carriers and rate cards, with reconciliation across sites and periods.</td>
+      <td><a class="btn sm" data-plan="business" href="https://buy.stripe.com/bJe14nfFX8KY9ZYe5R9EI05">Choose Business</a></td>
+    </tr>
   </table>
-  <p class="small">Single audit: USD 199 &mdash; up to 20 packets, one carrier, one rate card. Prices are as published in our service documentation; the packet ceilings are published so the price stays honest at this stage. Every engagement is confirmed by email before work starts.</p>
+  <p class="small">Every plan starts with a 14-day free trial. No card needed to start and you can cancel any time. Prices in GBP, billed by Stripe. Yearly billing is ten months for the price of twelve.</p>
 </section>
 
 <section id="start">
@@ -105,5 +124,23 @@
   <p>Anderson Sam &middot; <a href="mailto:yhaoo3111@gmail.com">yhaoo3111@gmail.com</a> &middot; Also: <a href="/">UK and Ireland tender alerts</a></p>
   <p>Worked example, method and data-handling terms are published in full on the <a href="/worked-example">worked example</a> page.</p>
 </div></footer>
+<script>
+(function(){
+  var monthly = {starter:'https://buy.stripe.com/eVq7sLalD2mA0pod1N9EI03', professional:'https://buy.stripe.com/8x27sL8dve5ic864vh9EI01', business:'https://buy.stripe.com/bJe14nfFX8KY9ZYe5R9EI05'};
+  var yearly = {starter:'https://buy.stripe.com/5kQ8wP79r9P22xwf9V9EI00', professional:'https://buy.stripe.com/7sY28rctL8KYb42f9V9EI02', business:'https://buy.stripe.com/3cI14nctLbXa8VUf9V9EI04'};
+  var label = {starter:['£24 / month','£240 / year'], professional:['£59 / month','£590 / year'], business:['£89 / month','£890 / year']};
+  var btns = document.querySelectorAll('.toggle button');
+  function set(term){
+    btns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-term') === term); });
+    document.querySelectorAll('[data-plan]').forEach(function(el){
+      var p = el.getAttribute('data-plan');
+      if (el.classList.contains('num')) { el.textContent = label[p][term === 'yearly' ? 1 : 0]; }
+      if (el.tagName === 'A') { el.href = (term === 'yearly' ? yearly : monthly)[p]; }
+    });
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.getAttribute('data-term')); }); });
+  set('monthly');
+})();
+</script>
 </body>
 </html>
