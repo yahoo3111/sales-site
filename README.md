@@ -28,5 +28,7 @@ enquiries", email notifications to yhaoo3111@gmail.com).
 
 ## Deploy
 
-uppcoder autobuild from the public GitHub repo. The Dockerfile serves the static files
-with nginx on port 80; clean URLs come from try_files ($uri $uri.html).
+Hosted on uppcoder as a public Express stack. `server.js` serves the static files from the
+repo root; `extensions: ['html']` gives the same clean URLs the old nginx `try_files` did
+(`/freight-invoice-audit` -> `freight-invoice-audit.html`). The app listens on
+`process.env.PORT` (default 3000) and exposes `/healthz` for health checks.
