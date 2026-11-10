@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freight Invoice Audit &amp; Cost Reconciliation | Anderson Sam</title>
+<meta name="description" content="You name the fields; we return them per document with the page each value came from, plus an exception list of every item that still needs a human.">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/">Anderson Sam<span>automation and data services</span></a>
+  <nav><a href="/">Tender alerts</a><a class="mail" href="mailto:yhaoo3111@gmail.com">yhaoo3111@gmail.com</a></nav>
+</div></header>
+<main class="wrap">
+<section class="hero">
+  <span class="badge">Service A &middot; Docu</span>
+  <h1>Freight Invoice Audit &amp; Cost Reconciliation</h1>
+  <p class="sub">You name the fields; we return them per document with the page each value came from &mdash; plus an exception list of every item that still needs a human. Nothing is silently corrected, and nothing is guessed.</p>
+  <a class="btn" href="#start">Send documents for a first pass</a>
+  <a class="btn alt" href="/worked-example">Read the full worked example</a>
+</section>
+
+<div class="proof">
+  <strong>Worked example.</strong> One two-page LTL freight invoice (sample ANF-INV-2026-004918, USD 1,886.50): <strong>40 fields</strong> extracted with page references, <strong>8 arithmetic checks</strong> run &mdash; line items to subtotal, fuel surcharge percentage, due date, packaging weight, routing-number checksum and more &mdash; <strong>7 passed and 1 flagged</strong>, with <strong>6 exceptions</strong> written up and the reason each one still needs a human. The example is labelled a sample throughout: it contains no client data.
+</div>
+
+<section>
+  <h2 class="sec">What you receive per packet</h2>
+  <p class="small">A packet is one freight invoice with its supporting transport documents, not one PDF file.</p>
+  <ul class="tight">
+    <li><b>extraction.json</b> &mdash; one record per document, field level, with page references</li>
+    <li><b>extraction.csv</b> &mdash; the same rows for the accounting import</li>
+    <li><b>exceptions.md</b> &mdash; every item that needs a human, with the reason</li>
+    <li><b>reconciliation.md</b> &mdash; the arithmetic and the derived measures (cost per pound, surcharge share, declared-value ratio)</li>
+    <li><b>One audit note</b> stating which checks ran and which did not</li>
+  </ul>
+</section>
+
+<section>
+  <h2 class="sec">The review, in order</h2>
+  <ol class="tight">
+    <li><b>Extraction.</b> Scanned and image documents are read by OCR; text-based PDFs are read by text extraction. An image-only PDF is never assumed to contain text.</li>
+    <li><b>Confidence marking.</b> Every extracted field carries a confidence marker. A field that cannot be read goes to a human-review list; it is not guessed.</li>
+    <li><b>Arithmetic checks.</b> Line items are summed and compared with the invoice total; accessorial and surcharge subtotals are compared with the line items they are claimed to cover; a fuel surcharge percentage is compared with the carrier&rsquo;s published index for the invoice date.</li>
+    <li><b>Duplicate checks.</b> Invoice numbers, and bill of lading, PRO and tracking numbers, are normalised and compared across the reviewed set.</li>
+    <li><b>Contract-rate checks.</b> Each charged amount is compared with the contracted rate or the carrier&rsquo;s published tariff.</li>
+    <li><b>Triaging.</b> Findings are separated into three amounts that are never combined: potential overcharge, verified billing discrepancy, and confirmed recovery. They are never summed into a single &ldquo;saved&rdquo; figure.</li>
+  </ol>
+</section>
+
+<section>
+  <h2 class="sec">Who this is for</h2>
+  <div class="card">
+    <h3 class="mini">Bookkeeping and accounting firms serving ecommerce sellers</h3>
+    <p>You receive supplier and freight documents from clients, and someone has to turn them into rows that reconcile. This is that step, with the exception list attached instead of hidden.</p>
+    <h3 class="mini">Shippers, 3PLs and freight brokers</h3>
+    <p>The same output drives overcharge recovery: fuel surcharge percentage, accessorial validation, and rate-per-pound comparison against a carrier rate card. The workflow is identical; the questions asked of the numbers are different.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec">Pricing</h2>
+  <table class="price">
+    <tr><th>Plan</th><th>Monthly</th><th>Packets included</th></tr>
+    <tr><td>Basic</td><td class="num">USD 149</td><td>50 packets</td></tr>
+    <tr><td>Professional</td><td class="num">USD 299</td><td>150 packets</td></tr>
+    <tr><td>Business</td><td class="num">USD 549</td><td>300 packets</td></tr>
+  </table>
+  <p class="small">Single audit: USD 199 &mdash; up to 20 packets, one carrier, one rate card. Prices are as published in our service documentation; the packet ceilings are published so the price stays honest at this stage. Every engagement is confirmed by email before work starts.</p>
+</section>
+
+<section id="start">
+  <h2 class="sec">Send documents for a first pass</h2>
+  <form class="enq" action="https://formcarry.com/s/VxTz_0yxAnA" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="service" value="Docu - freight invoice audit (first pass)">
+    <label>Email address
+      <input type="email" name="email" autocomplete="email" required placeholder="you@company.com">
+    </label>
+    <label>Company
+      <input type="text" name="company" placeholder="Firm or shipper name">
+    </label>
+    <label>Your role
+      <input type="text" name="role" placeholder="e.g. practice manager, transport manager">
+    </label>
+    <label>Roughly how many freight or customs documents do you handle per month?
+      <input type="text" name="volume" placeholder="e.g. 40 invoices, 2 carriers">
+    </label>
+    <div><button class="btn" type="submit">Request the first pass</button></div>
+    <p class="hint">The first pass needs 5 to 10 de-identified freight or customs invoices and the carrier&rsquo;s rate card for the same period. De-identification is your call; we work from what you send.</p>
+  </form>
+</section>
+
+<section>
+  <h2 class="sec">Data handling and scope</h2>
+  <div class="note">
+    <b>Data handling.</b> Documents are processed for the run and returned as output files. Extracted text and outputs are written to your own folder, not a shared pool. No document content is used to train a model. Retention is agreed per engagement, and deletion is a written instruction, not a setting someone has to remember.
+  </div>
+  <div class="note">
+    <b>Scope.</b> This is a document review and reconciliation service. It is not an independent financial audit and not legal advice, and it expresses no audit opinion. No recovery is guaranteed: any dispute depends on the carrier&rsquo;s own dispute rules and on documentary evidence that must still be assembled. Industry figures quoted on the worked-example page are those publishers&rsquo; statements with their source and read date, not measurements of any client&rsquo;s freight bills.
+  </div>
+</section>
+</main>
+<footer class="site"><div class="wrap">
+  <p>Anderson Sam &middot; <a href="mailto:yhaoo3111@gmail.com">yhaoo3111@gmail.com</a> &middot; Also: <a href="/">UK and Ireland tender alerts</a></p>
+  <p>Worked example, method and data-handling terms are published in full on the <a href="/worked-example">worked example</a> page.</p>
+</div></footer>
+</body>
+</html>

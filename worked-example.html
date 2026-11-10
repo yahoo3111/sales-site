@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>What a Freight Invoice Audit Returns</title>
+<style>body{max-width:720px;margin:40px auto;padding:0 20px;font:18px/1.6 Georgia,serif;color:#111}h1{font-size:34px;line-height:1.2;margin:.6em 0 .4em}h2{font-size:24px;margin:1.6em 0 .5em}p{margin:.8em 0}table{border-collapse:collapse;width:100%;margin:1.2em 0;font:15px/1.45 -apple-system,Segoe UI,Roboto,sans-serif}th,td{border:1px solid #ccc;padding:6px 9px;text-align:left;vertical-align:top}th{background:#f4f4f4}code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:#f2f2f2;padding:1px 4px}hr{border:0;border-top:1px solid #ddd;margin:2em 0}</style></head><body>
+<p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;margin:0;padding:10px 20px;background:#f6f7f9;border-bottom:1px solid #dfe5eb"><a href="/freight-invoice-audit" style="color:#0b3d5c">&larr; Freight Invoice Audit &amp; Cost Reconciliation</a> &nbsp;&middot;&nbsp; <a href="/" style="color:#0b3d5c">Tender alerts</a></p>
+<h1>What a Freight Invoice Audit Returns: One Document, End to End</h1>
+<p>Most invoice-automation demos show you a PDF and a JSON blob. That tells a bookkeeper nothing about whether the output can go into a close.</p>
+<p>This post shows the whole path for one document: every field extracted, every arithmetic check run, and every item that still needs a human. The document is a sample LTL freight invoice, <strong>ANF-INV-2026-004918</strong>, two pages, USD 1,886.50, 40 extracted fields. It is an illustrative sample, not a client invoice, and it is labelled that way throughout.</p>
+<h2>Who this is for</h2>
+<p><strong>Primary buyer: bookkeeping and accounting firms serving ecommerce sellers.</strong> You receive supplier and freight documents from clients, and someone has to turn them into rows that reconcile. This is that step, with the exception list attached instead of hidden.</p>
+<p><strong>Second buyer: shippers, 3PLs and freight brokers.</strong> The same output drives overcharge recovery: fuel surcharge percentage, accessorial validation, rate-per-pound comparison against a carrier rate card. The workflow is identical; the questions asked of the numbers are different. The two offers are priced and sold separately.</p>
+<h2>1. The document</h2>
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Document type</td><td>LTL freight invoice</td></tr>
+<tr><td>Invoice number</td><td>ANF-INV-2026-004918</td></tr>
+<tr><td>Invoice date</td><td>January 12, 2026</td></tr>
+<tr><td>Payment terms</td><td>Net 30, due February 11, 2026</td></tr>
+<tr><td>Origin to destination</td><td>Columbus, OH to Dallas, TX</td></tr>
+<tr><td>Shipment</td><td>10 pallets, aluminum machined components, class 70, 5,200 lbs</td></tr>
+<tr><td>Total amount due</td><td>USD 1,886.50</td></tr>
+</tbody></table>
+<p>Two pages, one charge table, one remittance block. A clean document, which is the point: every exception below is visible only because the checks ran.</p>
+<h2>2. Extracted fields</h2>
+<p>40 fields, each with the page it came from and whether it is usable as-is.</p>
+<table><thead><tr><th>#</th><th>Field</th><th>Value</th><th>Page</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>Invoice number</td><td>ANF-INV-2026-004918</td><td>1</td><td>exact</td></tr>
+<tr><td>2</td><td>Invoice date</td><td>January 12, 2026</td><td>1</td><td>exact</td></tr>
+<tr><td>3</td><td>Payment terms</td><td>Net 30</td><td>1</td><td>exact</td></tr>
+<tr><td>4</td><td>Due date</td><td>February 11, 2026</td><td>1</td><td>exact</td></tr>
+<tr><td>5</td><td>Customer account</td><td>ACME-44721</td><td>1</td><td>exact</td></tr>
+<tr><td>6</td><td>Bill-to name</td><td>Acme Manufacturing, Inc.</td><td>1</td><td>exact</td></tr>
+<tr><td>7</td><td>Bill-to address</td><td>1234 Industrial Parkway, Columbus, OH 43215</td><td>1</td><td>exact</td></tr>
+<tr><td>8</td><td>PRO / freight bill number</td><td>778345921</td><td>1</td><td>exact</td></tr>
+<tr><td>9</td><td>Bill of lading number</td><td>FCC-2026-001234</td><td>1</td><td>exact</td></tr>
+<tr><td>10</td><td>Pickup date</td><td>January 8, 2026</td><td>1</td><td>exact</td></tr>
+<tr><td>11</td><td>Delivery date</td><td>January 10, 2026</td><td>1</td><td>exact</td></tr>
+<tr><td>12</td><td>Service level</td><td>LTL - Standard</td><td>1</td><td>exact</td></tr>
+<tr><td>13</td><td>Equipment type</td><td>53&#x27; dry van</td><td>1</td><td>exact</td></tr>
+<tr><td>14</td><td>Origin</td><td>Acme Manufacturing, Inc., Columbus, OH 43215</td><td>1</td><td>exact</td></tr>
+<tr><td>15</td><td>Destination</td><td>Beta Distribution LLC, Dallas, TX 75241</td><td>1</td><td>exact</td></tr>
+<tr><td>16</td><td>Line haul quantity</td><td>10 pallets</td><td>1</td><td>exact</td></tr>
+<tr><td>17</td><td>Commodity description</td><td>Aluminum machined components</td><td>1</td><td>exact</td></tr>
+<tr><td>18</td><td>NMFC item</td><td>123456</td><td>1</td><td>review</td></tr>
+<tr><td>19</td><td>Freight class</td><td>70</td><td>1</td><td>exact</td></tr>
+<tr><td>20</td><td>Weight</td><td>5,200 lbs</td><td>1</td><td>exact</td></tr>
+<tr><td>21</td><td>Declared value</td><td>USD 75,000</td><td>1</td><td>review</td></tr>
+<tr><td>22</td><td>Carrier legal name</td><td>Atlas National Freight, LLC</td><td>1</td><td>exact</td></tr>
+<tr><td>23</td><td>Carrier MC number</td><td>MC-987654</td><td>1</td><td>review</td></tr>
+<tr><td>24</td><td>Carrier DOT number</td><td>USDOT 3124567</td><td>1</td><td>review</td></tr>
+<tr><td>25</td><td>Carrier SCAC</td><td>ANFL</td><td>1</td><td>exact</td></tr>
+<tr><td>26</td><td>Carrier remit address</td><td>4500 Logistics Parkway, Memphis, TN 38118</td><td>1</td><td>exact</td></tr>
+<tr><td>27</td><td>Billing contact</td><td>Sandra Coleman, (901) 555-7421 ext. 204, billing@atlasnationalfreight.com</td><td>1</td><td>exact</td></tr>
+<tr><td>28</td><td>Bank routing number</td><td>011000138</td><td>2</td><td>checksum pass</td></tr>
+<tr><td>29</td><td>Bank account</td><td><strong>*</strong>**4921</td><td>2</td><td>partial</td></tr>
+<tr><td>30</td><td>Line haul charge</td><td>USD 1,425.00</td><td>2</td><td>exact</td></tr>
+<tr><td>31</td><td>Fuel surcharge</td><td>USD 256.50</td><td>2</td><td>exact</td></tr>
+<tr><td>32</td><td>Accessorial, liftgate pickup</td><td>USD 75.00</td><td>2</td><td>exact</td></tr>
+<tr><td>33</td><td>Accessorial, appointment delivery</td><td>USD 45.00</td><td>2</td><td>exact</td></tr>
+<tr><td>34</td><td>Accessorial, limited access warehouse</td><td>USD 85.00</td><td>2</td><td>exact</td></tr>
+<tr><td>35</td><td>Subtotal</td><td>USD 1,886.50</td><td>2</td><td>exact</td></tr>
+<tr><td>36</td><td>Tax</td><td>USD 0.00</td><td>2</td><td>review</td></tr>
+<tr><td>37</td><td>Total amount due</td><td>USD 1,886.50</td><td>2</td><td>exact</td></tr>
+<tr><td>38</td><td>Tariff reference</td><td>ANF-100</td><td>2</td><td>exact</td></tr>
+<tr><td>39</td><td>Claim window</td><td>9 months from delivery</td><td>2</td><td>exact</td></tr>
+<tr><td>40</td><td>Late payment charge</td><td>1.5% monthly</td><td>2</td><td>exact</td></tr>
+</tbody></table>
+<p><strong>Field accuracy on this document:</strong> 33 exact, 5 flagged for review, 1 partial, 1 passed a checksum. That is a count of one document, not an accuracy rate. A rate needs a labelled set of documents, and this sample does not claim one.</p>
+<h2>3. Checks that ran</h2>
+<table><thead><tr><th>Check</th><th>Result</th><th>Detail</th></tr></thead><tbody>
+<tr><td>Line items sum to subtotal</td><td>pass</td><td>1,425.00 + 256.50 + 205.00 = 1,886.50</td></tr>
+<tr><td>Subtotal equals total</td><td>pass</td><td>1,886.50 = 1,886.50</td></tr>
+<tr><td>Fuel surcharge equals 18% of line haul</td><td>pass</td><td>0.18 x 1,425.00 = 256.50</td></tr>
+<tr><td>Due date equals invoice date plus Net 30</td><td>pass</td><td>30 days</td></tr>
+<tr><td>Invoice issued after delivery</td><td>pass</td><td>issued 2 days after delivery</td></tr>
+<tr><td>Packaging quantity matches weight</td><td>pass</td><td>5,200 lbs over 10 pallets = 520 lbs per pallet</td></tr>
+<tr><td>Routing number ABA checksum</td><td>pass</td><td>weighted sum 40, mod 10 = 0</td></tr>
+<tr><td>Page count statement matches document</td><td>flag</td><td>footer claims 1 page; document has 2</td></tr>
+</tbody></table>
+<p>Seven passes and one flag. The flag is a document-quality issue, not a charge error, and it goes on the exception list rather than being silently corrected.</p>
+<h2>4. Exceptions: what still needs a human</h2>
+<ol><li><strong>NMFC item 123456.</strong> Six digits with no sub-class. Class 70 is plausible, but the item number has to be checked against the carrier tariff before the classification is relied on.</li><li><strong>Declared value USD 75,000 with no declared-value charge line.</strong> Either the charge was waived or the coverage is not actually in place. Worth one question before the invoice is approved.</li><li><strong>Carrier authority, MC-987654 and USDOT 3124567.</strong> Not verified in this sample. Verification against the FMCSA register is a separate step.</li><li><strong>Tax stated as non-taxable, USD 0.00, with no jurisdiction shown.</strong> Freight taxability varies by state and by service. The address on the invoice is not proof of the tax treatment.</li><li><strong>Bank account masked as </strong><strong>*</strong>4921.** The routing number passes its checksum; the account cannot be verified from the document, so payment detail needs a second source.</li><li><strong>Page footer reads &quot;Page 1 of 1&quot; on a two-page document.</strong> One line, but it is the kind of error that later argues about whether a page is missing.</li></ol>
+<h2>5. Reconciliation summary</h2>
+<table><thead><tr><th>Measure</th><th>Value</th></tr></thead><tbody>
+<tr><td>Line haul</td><td>USD 1,425.00</td></tr>
+<tr><td>Fuel surcharge</td><td>USD 256.50, 18% of line haul</td></tr>
+<tr><td>Accessorials</td><td>USD 205.00, 10.9% of the total</td></tr>
+<tr><td>Total due</td><td>USD 1,886.50</td></tr>
+<tr><td>Cost per pound</td><td>USD 0.3628</td></tr>
+<tr><td>Line haul per pound</td><td>USD 0.2740</td></tr>
+<tr><td>Declared value to freight charge</td><td>39.8x</td></tr>
+</tbody></table>
+<p>The only judgement in this table is the accessorial share. At 10.9% of the total, three accessorials on one LTL move is within normal range, but each one needs the shipment instruction that authorises it. Without that instruction, an accessorial is an assertion.</p>
+<h2>6. What you receive per packet</h2>
+<p>A packet is one freight invoice with its supporting transport documents, not one PDF file.</p>
+<ul><li><code>extraction.json</code>, one record per document, field level, with page references</li><li><code>extraction.csv</code>, the same rows for the accounting import</li><li><code>exceptions.md</code>, every item that needs a human, with the reason</li><li><code>reconciliation.md</code>, the arithmetic and the derived measures</li><li>One audit note stating which checks ran and which did not</li></ul>
+<h2>7. Data handling</h2>
+<ul><li>Documents are processed for the run and returned as output files.</li><li>Extracted text and outputs are written to the client&#x27;s own folder, not to a shared pool.</li><li>No document content is used to train a model.</li><li>Retention is stated per engagement, and deletion is a written instruction, not a setting someone has to remember.</li></ul>
+<h2>8. Pricing</h2>
+<table><thead><tr><th>Tier</th><th>Monthly</th><th>Packet ceiling during trial</th></tr></thead><tbody>
+<tr><td>Basic</td><td>USD 149</td><td>50 packets</td></tr>
+<tr><td>Professional</td><td>USD 299</td><td>150 packets</td></tr>
+<tr><td>Business</td><td>USD 549</td><td>300 packets</td></tr>
+</tbody></table>
+<p>Single audit: USD 199, up to 20 packets, one carrier, one rate card.</p>
+<p>Ceilings are trial limits, published so the price stays honest at this stage.</p>
+<h2>9. What this example does not prove</h2>
+<ul><li>It does not prove a field accuracy rate. One document is a demonstration, not a measurement.</li><li>It does not prove handling of scanned or photographed invoices. This one has a text layer.</li><li>It does not prove multi-carrier rate-card comparison. No rate card was supplied.</li><li>It does not prove that a bookkeeping firm will pay for it. That is a customer question, not a document question.</li></ul>
+<p>Each of those is a separate test, and I would rather name them than imply them.</p>
+<hr>
+<p>Sample document: ANF-INV-2026-004918, used with the fields shown above. Prepared as a public worked example of the extraction and reconciliation output.</p>
+</body></html>
