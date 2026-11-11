@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://s.apps-3.websson.cloud/sitemap.xml

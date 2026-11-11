@@ -1,34 +1,14 @@
-# Sales site - Docu (A) and Beacon (B)
+# Sales site (Anderson Sam)
 
-Two public pages replacing the Substack sample pages, served as static files by nginx.
+Two sample sales pages plus a worked example, served by a dependency-free
+Python static server (`app.py`). Deployed on uppcoder from this repository.
 
-- `/` - The Tender Alert for Small Contractors - Sample (Beacon, GBP, Stripe checkout)
-- `/freight-invoice-audit` - Freight Invoice Audit & Cost Reconciliation (Docu, USD list prices, enquiry form)
-- `/worked-example` - the full worked example (sample invoice ANF-INV-2026-004918)
+- `/` - B track: tender alerts for small contractors
+- `/freight-invoice-audit` - A track: freight invoice audit and cost reconciliation
+- `/worked-example` - the full worked example for the audit output
+- `/robots.txt`, `/sitemap.xml`, `/og-image.png` - SEO and link-preview files
 
-## Price source: Stripe (live)
-
-Beacon plans, all verified active in Stripe on 2026-11-10:
-
-- Starter GBP 24/month - https://buy.stripe.com/eVq7sLalD2mA0pod1N9EI03
-- Starter GBP 240/year - https://buy.stripe.com/5kQ8wP79r9P22xwf9V9EI00
-- Professional GBP 59/month - https://buy.stripe.com/8x27sL8dve5ic864vh9EI01
-- Professional GBP 590/year - https://buy.stripe.com/7sY28rctL8KYb42f9V9EI02
-- Business GBP 89/month - https://buy.stripe.com/bJe14nfFX8KY9ZYe5R9EI05
-- Business GBP 890/year - https://buy.stripe.com/3cI14nctLbXa8VUf9V9EI04
-
-Docu prices are not in Stripe (no Docu product exists there). They are the published
-list prices from the service documentation: USD 149 / 299 / 549 per month (50 / 150 / 300
-packets) and a single audit at USD 199 (up to 20 packets, one carrier, one rate card).
-
-## Form
-
-Both pages post to https://formcarry.com/s/VxTz_0yxAnA (Formcarry form "Docu and Beacon
-enquiries", email notifications to yhaoo3111@gmail.com).
-
-## Deploy
-
-Hosted on uppcoder as a public Express stack. `server.js` serves the static files from the
-repo root; `extensions: ['html']` gives the same clean URLs the old nginx `try_files` did
-(`/freight-invoice-audit` -> `freight-invoice-audit.html`). The app listens on
-`process.env.PORT` (default 3000) and exposes `/healthz` for health checks.
+Forms POST to formcarry; payments are Stripe payment links. Published prices
+must stay aligned with the Stripe products the buttons point at:
+B track GBP 24/59/89 (monthly) and 240/590/890 (yearly); A track USD
+149/299/549 (monthly) and 1490/2990/5490 (yearly).
